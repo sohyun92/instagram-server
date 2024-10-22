@@ -19,7 +19,6 @@ jobs:
           script: |
             cd /home/ubuntu/instagram-server
             git pull origin main
-            npm i
-            npm run build
-            pm2 kill
-            pm2 start dist/main.js --name "backend-server"
+            sudo ./gradlew clean build
+            sudo fuser -k -n tcp 8080 || true
+            nohup java -jar build/libs/*SNAPSHOT.jar
