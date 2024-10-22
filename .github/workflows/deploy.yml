@@ -12,5 +12,11 @@ jobs:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
 
+      - name: JDK 17버전 설치 test
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
       - name: 테스트 및 빌드하기
         run: echo $JAVA_HOME
