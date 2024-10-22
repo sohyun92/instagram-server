@@ -25,4 +25,4 @@ jobs:
         run: | 
           echo $JAVA_HOME
           chmod +x gradlew
-          sudo ./gradlew clean build
+          ./gradlew clean build
