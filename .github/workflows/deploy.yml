@@ -17,17 +17,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }} # EC2의 Key 파일의 내부 텍스트
           script_stop: true # 아래 script 중 실패하는 명령이 하나라도 있으면 실패로 처리
           script: |
-            cd /home/ubuntu/instagram-server
+            cd /home/ubuntu/instagram-server 
             git pull origin main
-
-      - name: JDK 17버전 설치 test
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: 테스트 및 빌드하기
-        run: | 
-          echo $JAVA_HOME
-          chmod +x gradlew
-          sudo ./gradlew clean build
+            ./gradlew clean build
+            sudo fuser -k -n tcp 8080 || true 
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
