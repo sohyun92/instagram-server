@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: 테스트 및 빌드하기
+        run: |
+          chmod +x gradlew
+          sudo ./gradlew clean build
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
         with:
