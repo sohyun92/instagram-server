@@ -19,4 +19,7 @@ jobs:
           java-version: 17
 
       - name: 테스트 및 빌드하기
-        run: echo $JAVA_HOME
+        run: | 
+          echo $JAVA_HOME
+          chmod +x gradlew
+          sudo ./gradlew clean build
