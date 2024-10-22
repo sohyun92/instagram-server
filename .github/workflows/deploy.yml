@@ -21,6 +21,12 @@ jobs:
       - name: Java 버전 확인
         run: java -version
 
+      - name: Gradle에 JAVA_HOME 설정
+        run: |
+          echo $JAVA_HOME
+          export JAVA_HOME=$(which java)
+          ./gradlew clean build
+
       - name: 테스트 및 빌드하기
         run: | 
           echo $JAVA_HOME
