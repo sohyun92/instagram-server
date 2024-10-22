@@ -9,27 +9,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Github Repository 파일 불러오기
-        uses: actions/checkout@v4
-
-      - name: 테스트 및 빌드하기
-        run: |
-          chmod +x gradlew
-          sudo ./gradlew build 
-          sudo ./gradlew clean build
-
-      - name: SSH로 EC2에 접속하기a
+      - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script_stop: true
+          host: ${{ secrets.EC2_HOST }} # EC2의 주소
+          username: ${{ secrets.EC2_USERNAME }} # EC2 접속 username
+          key: ${{ secrets.EC2_PRIVATE_KEY }} # EC2의 Key 파일의 내부 텍스트
+          script_stop: true # 아래 script 중 실패하는 명령이 하나라도 있으면 실패로 처리
           script: |
-            rm -rf /home/ubuntu/gitCicdTestServer/current
-            mkdir /home/ubuntu/gitCicdTestServer/current
-            mv /home/ubuntu/gitCicdTestServer/tobe/project.jar /home/ubuntu/gitCicdTestServer/current/project.jar
-            cd /home/ubuntu/gitCicdTestServer/current
-            sudo fuser -k -n tcp 8080 || true
-            nohup java -jar project.jar > ./output.log 2>&1 & 
-            rm -rf /home/ubuntu/gitCicdTestServer/tobe
+            cd /home/ubuntu/instagram-server 
+            git pull origin main
+            sudo ./gradlew clean build
+            sudo fuser -k -n tcp 8080 || true 
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
